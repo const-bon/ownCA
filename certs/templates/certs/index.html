@@ -1,0 +1,10 @@
+<a href="{% url 'certs:create'%}">Create new certificate</a>
+{% if certificate_list %}
+    <ul>
+    {% for certificate in certificate_list %}
+        <li><a href="{% url 'certs:detail' certificate.id %}">{{ certificate.common_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}

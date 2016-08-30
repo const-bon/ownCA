@@ -1,0 +1,42 @@
+<style>
+table {
+    border-collapse: collapse;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
+
+th {
+    text-align: left;
+}
+</style>
+
+<h1>{{ certificate.common_name }}</h1>
+
+<a href="{% url 'certs:index'%}">Go back to index</a>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<table style="border: 1px solid black">
+    <tr>
+        <th class="name">Common name</th>
+        <th class="content">{{ certificate.common_name }}</th>
+    </tr>
+    <tr>
+        <th class="name">Creation date</th>
+        <th class="content">{{ certificate.creation_date|date:'Y-m-d H:i:s' }}</th>
+    </tr>
+    <tr>
+        <th class="name">Certificate</th>
+        <th class="content">{{ certificate.certificate }}</th>
+    </tr>
+    <tr>
+        <th class="name">Signing request</th>
+        <th class="content">{{ certificate.signing_request }}</th>
+    </tr>
+    <tr>
+        <th class="name">Key</th>
+        <th class="content">{{ certificate.key }}</th>
+    </tr>
+</table>
