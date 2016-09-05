@@ -1,5 +1,25 @@
+<style>
+table {
+    border-collapse: collapse;
+}
+
+<!--table, td, th {-->
+    <!--border: 1px solid black;-->
+<!--}-->
+
+th {
+    text-align: left;
+}
+</style>
+<a href="{% url 'certs:index'%}">Go back to index</a>
 <form action="" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save" />
+    <table>{{ form.as_table }}</table>
+    <!--{% for field in form %}-->
+        <!--<div class="fieldWrapper">-->
+            <!--{{ field.errors }}-->
+            <!--{{ field.label_tag }} {{ field }}-->
+        <!--</div>-->
+    <!--{% endfor %}-->
+    <input type="submit" value="Submit" />
 </form>
