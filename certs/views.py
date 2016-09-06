@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, FormView
 
-from .models import Certificate
+from .models import Certificate, CACertificate
 
 from .forms import CertificateForm
 
@@ -43,13 +43,6 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         return Certificate.objects.order_by('-creation_date')
-
-
-class CertificateCreate(CreateView):
-    model = Certificate
-    fields = ['common_name', 'certificate', 'signing_request', 'key', 'creation_date']
-    template_name = 'certs/create.html'
-    success_url = reverse_lazy('certs:index')
 
 
 class DetailView(generic.DetailView):

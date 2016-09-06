@@ -3,7 +3,13 @@
 {% if certificate_list %}
     <ul>
     {% for certificate in certificate_list %}
-        <li><a href="{% url 'certs:detail' certificate.id %}">{{ certificate.common_name }}</a></li>
+        <li><a href="{% url 'certs:detail' certificate.id %}">
+            {% if certificate.common_name %}
+            {{ certificate.common_name }}
+            {% else %}
+            certificate id = {{ certificate.id }}
+            {% endif %}
+        </a></li>
     {% endfor %}
     </ul>
 {% else %}
