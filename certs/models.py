@@ -25,14 +25,14 @@ class MetaCertificate(models.Model):
     creation_date = models.DateTimeField()
 
     @classmethod
-    def create_ca_certificate(cls, cert, key, **kwargs):
+    def create_ca_certificate(cls, cert, key, req, **kwargs):
         """
         TODO: use certificate's creation date but not "now".
         """
 
         certificate = cls(certificate=cert,
                           key=key,
-                          # signing_request=req,
+                          signing_request=req,
                           creation_date=datetime.datetime.now(),
                           **kwargs)
         certificate.save()

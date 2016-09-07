@@ -45,12 +45,26 @@ class IndexView(generic.ListView):
         return Certificate.objects.order_by('-creation_date')
 
 
+class CAIndexView(generic.ListView):
+    template_name = 'certs/ca_index.html'
+    context_object_name = 'certificate_list'
+
+    def get_queryset(self):
+        return CACertificate.objects.order_by('-creation_date')
+
+
 class DetailView(generic.DetailView):
     model = Certificate
     template_name = 'certs/detail.html'
 
 
-class CertificateCreateView(FormView):
+class CADetailView(generic.DetailView):
+    model = CACertificate
+    context_object_name = 'certificate'
+    template_name = 'certs/detail.html'
+
+
+class CreateCertificateView(FormView):
     template_name = 'certs/create.html'
     form_class = CertificateForm
     success_url = reverse_lazy('certs:index')
@@ -58,24 +72,18 @@ class CertificateCreateView(FormView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        form.create_certificate()
-        return super(CertificateCreateView, self).form_valid(form)
+        form.create_certificate(form.cleaned_data)
+        return super(CreateCertificateView, self).form_valid(form)
 
 
-class CertificateCreateCAView(FormView):
+class CreateCertificateCAView(FormView):
     template_name = 'certs/create.html'
     form_class = CertificateForm
-    success_url = reverse_lazy('certs:index')
+    success_url = reverse_lazy('certs:ca_index')
 
     def form_valid(self, form):
 
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         form.create_ca_certificate(form.cleaned_data)
-        return super(CertificateCreateCAView, self).form_valid(form)
-
-# def detail(request, certificate_common__name):
-#     certificate = get_object_or_404(Certificate, common_name=certificate_common__name)
-#     return render(request, 'certs/detail.html', {
-#             'certificate': certificate,
-#         })
+        return super(CreateCertificateCAView, self).form_valid(form)
