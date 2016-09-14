@@ -42,7 +42,7 @@ class IndexView(generic.ListView):
     context_object_name = 'certificate_list'
 
     def get_queryset(self):
-        return Certificate.objects.order_by('-creation_date')
+        return Certificate.objects.order_by('-notBeforeDate')
 
 
 class CAIndexView(generic.ListView):
@@ -50,18 +50,32 @@ class CAIndexView(generic.ListView):
     context_object_name = 'certificate_list'
 
     def get_queryset(self):
-        return CACertificate.objects.order_by('-creation_date')
+        return CACertificate.objects.order_by('-notBeforeDate')
 
 
 class DetailView(generic.DetailView):
     model = Certificate
     template_name = 'certs/detail.html'
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(DetailView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        cert_obj = Certificate.objects.filter(pk=kwargs['object'].id).get()
+        context['certificate'] = cert_obj.__dict__
+        return context
 
 class CADetailView(generic.DetailView):
     model = CACertificate
-    context_object_name = 'certificate'
     template_name = 'certs/detail.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(CADetailView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        cert_obj = CACertificate.objects.filter(pk=kwargs['object'].id).get()
+        context['certificate'] = cert_obj.__dict__
+        return context
 
 
 class CreateCertificateView(FormView):

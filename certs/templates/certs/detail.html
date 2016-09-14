@@ -19,24 +19,10 @@ th {
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <table style="border: 1px solid black">
+    {% for field, value in certificate.items %}
     <tr>
-        <th class="name">Common name</th>
-        <th class="content">{{ certificate.common_name }}</th>
+        <th>{{ field }}</th>
+        <th><pre>{{ value }}</pre></th>
     </tr>
-    <tr>
-        <th class="name">Creation date</th>
-        <th class="content">{{ certificate.creation_date|date:'Y-m-d H:i:s' }}</th>
-    </tr>
-    <tr>
-        <th class="name">Certificate</th>
-        <th class="content"><pre>{{ certificate.certificate }}</pre></th>
-    </tr>
-    <tr>
-        <th class="name">Signing request</th>
-        <th class="content"><pre>{{ certificate.signing_request }}</pre></th>
-    </tr>
-    <tr>
-        <th class="name">Key</th>
-        <th class="content"><pre>{{ certificate.key }}</pre></th>
-    </tr>
+    {% endfor %}
 </table>

@@ -6,8 +6,8 @@
     <ul>
     {% for certificate in certificate_list %}
         <li><a href="{% url 'certs:detail' certificate.id %}">
-            {% if certificate.common_name %}
-            {{ certificate.common_name }}
+            {% if certificate.commonName %}
+            {{ certificate.commonName }}
             {% else %}
             certificate id = {{ certificate.id }}
             {% endif %}

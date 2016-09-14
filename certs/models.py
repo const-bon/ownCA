@@ -12,33 +12,29 @@ TODO: Make MAX_LENGTH changeable through config page
 
 
 class MetaCertificate(models.Model):
-    country_name = models.CharField(max_length=2)
-    state_name = models.CharField(max_length=MAX_LENGTH)
-    locality_name = models.CharField(max_length=MAX_LENGTH)
-    organization_name = models.CharField(max_length=MAX_LENGTH)
-    organizational_unit_name = models.CharField(max_length=MAX_LENGTH)
-    common_name = models.CharField(max_length=MAX_LENGTH)
-    email_address = models.CharField(max_length=MAX_LENGTH)
-    certificate = models.TextField()
-    signing_request = models.TextField()
+    countryName = models.CharField(max_length=2)
+    stateOrProvinceName = models.CharField(max_length=MAX_LENGTH)
+    localityName = models.CharField(max_length=MAX_LENGTH)
+    organizationName = models.CharField(max_length=MAX_LENGTH)
+    organizationalUnitName = models.CharField(max_length=MAX_LENGTH)
+    commonName = models.CharField(max_length=MAX_LENGTH)
+    emailAddress = models.CharField(max_length=MAX_LENGTH)
+    cert = models.TextField()
+    signingRequest = models.TextField()
     key = models.TextField()
-    creation_date = models.DateTimeField()
+    notBeforeDate = models.DateTimeField()
+    notAfterDate = models.DateTimeField()
 
     @classmethod
-    def create_ca_certificate(cls, cert, key, req, **kwargs):
+    def create_certificate(cls, **kwargs):
         """
         TODO: use certificate's creation date but not "now".
         """
 
-        certificate = cls(certificate=cert,
-                          key=key,
-                          signing_request=req,
-                          creation_date=datetime.datetime.now(),
-                          **kwargs)
-        certificate.save()
+        cert = cls(**kwargs)
+        cert.save()
         # do something with the book
-        return certificate
-    pass
+        return cert
 
     class Meta:
         abstract = True
@@ -49,4 +45,4 @@ class CACertificate(MetaCertificate):
 
 
 class Certificate(MetaCertificate):
-    pass
+    ca_cert = models.ForeignKey(CACertificate)
