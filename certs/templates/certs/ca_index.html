@@ -1,19 +1,36 @@
+<style>
+table {
+    border-collapse: collapse;
+}
+
+<!--table, td, th {-->
+    <!--border: 1px solid black;-->
+<!--}-->
+
+th {
+    text-align: left;
+}
+</style>
 <a href="{% url 'certs:ca_create'%}">Create CA certificate</a><br>
 <a href="{% url 'certs:create'%}">Create new certificate</a><br>
 <a href="{% url 'certs:ca_index'%}">Show all CA certificates</a><br>
-<a href="{% url 'certs:index'%}">Show all certificates</a>
+<a href="{% url 'certs:index'%}">Show all certificates</a><br>
+<br>
 {% if certificate_list %}
-    <ul>
-    {% for certificate in certificate_list %}
-        <li><a href="{% url 'certs:ca_detail' certificate.id %}">
-            {% if certificate.commonName %}
-            {{ certificate.commonName }}
-            {% else %}
-            certificate id = {{ certificate.id }}
-            {% endif %}
-        </a></li>
-    {% endfor %}
-    </ul>
+    <table>
+        {% for certificate in certificate_list %}
+            <tr>
+                <th><a href="{% url 'certs:ca_detail' certificate.id %}">
+                {% if certificate.commonName %}
+                {{ certificate.commonName }}
+                {% else %}
+                certificate id = {{ certificate.id }}
+                {% endif %}
+                </a></th>
+                <th><a href="{% url 'certs:get_crl' certificate.id %}">Generate CRL</a></th>
+            </tr>
+        {% endfor %}
+    </table>
 {% else %}
-    <p>No polls are available.</p>
+    <p>No CA certificates are available.</p>
 {% endif %}

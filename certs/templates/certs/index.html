@@ -1,19 +1,52 @@
-<a href="{% url 'certs:ca_create'%}">Create CA certificate</a><br>
-<a href="{% url 'certs:create'%}">Create new certificate</a><br>
-<a href="{% url 'certs:ca_index'%}">Show all CA certificates</a><br>
-<a href="{% url 'certs:index'%}">Show all certificates</a>
-{% if certificate_list %}
-    <ul>
-    {% for certificate in certificate_list %}
-        <li><a href="{% url 'certs:detail' certificate.id %}">
-            {% if certificate.commonName %}
-            {{ certificate.commonName }}
-            {% else %}
-            certificate id = {{ certificate.id }}
-            {% endif %}
-        </a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
+<head>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+    <a href="{% url 'certs:ca_create'%}">Create CA certificate</a><br>
+    <a href="{% url 'certs:create'%}">Create new certificate</a><br>
+    <a href="{% url 'certs:ca_index'%}">Show all CA certificates</a><br>
+    <a href="{% url 'certs:index'%}">Show all certificates</a><br>
+    <br>
+    {% if certificate_list %}
+        <table>
+            <tr>
+                <th>Common name or primary key</th>
+                <th>CA certificate</th>
+                <th>Revoked?</th>
+                <th>Action</th>
+            </tr>
+            {% for certificate in certificate_list %}
+            <tr>
+                <th><a href="{% url 'certs:detail' certificate.id %}">
+                {% if certificate.commonName %}
+                {{ certificate.commonName }}
+                {% else %}
+                certificate id = {{ certificate.id }}
+                {% endif %}
+                </a></th>
+                <th>{{ certificate.ca_cert }}</th>
+                <th>{{ certificate.revoked }}</th>
+                <th><a href="{% url 'certs:revoke' certificate.id %}">Revoke</a></th>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No certificates are available.</p>
+    {% endif %}
+</body>
