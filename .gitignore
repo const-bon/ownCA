@@ -2,3 +2,7 @@
 .venv
 db.sqlite3*
 test
+*.pyc
+
+certs/migrations/*
+!certs/migrations/__init__.py
