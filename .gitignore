@@ -1,7 +1,8 @@
 .idea
 .venv
 db.sqlite3*
-test
+
+bak
 *.pyc
 
 certs/migrations/*

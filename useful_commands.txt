@@ -5,7 +5,7 @@ Create CA key
 openssl genrsa -out rootCA.key 2048
 
 Create CA crt (similar to pem)
-openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.pem
+openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.crt
 
 Create user's certificate
 openssl genrsa -out device.key 2048
@@ -14,7 +14,7 @@ Create user's csr
 openssl req -new -key device.key -out device.csr
 
 Sign user's csr
-openssl x509 -req -in device.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out device.crt -days 500 -sha256
+openssl x509 -req -in device.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out device.crt -days 500 -sha256
 
 Verify if certificate belongs to its CA
 openssl verify -CAfile rootCA.pem device.crt
@@ -25,13 +25,13 @@ openssl x509 -in device.crt -noout -text
 ===
 
 Create CRL
-openssl ca -gencrl -cert rootCA.pem -keyfile rootCA.key -out rootCRL.pem
+openssl ca -gencrl -cert rootCA.crt -keyfile rootCA.key -out rootCRL.pem
 
 Check CRL contents (serial of revoked certificate should be there)
 openssl crl -in rootCRL.pem -noout -text
 
 Revoke a certificate
-openssl ca -cert rootCA.pem -keyfile rootCA.key -revoke device.crt
+openssl ca -cert rootCA.crt -keyfile rootCA.key -revoke device.crt
 
 
 #Check if CRL belongs to ca.crt

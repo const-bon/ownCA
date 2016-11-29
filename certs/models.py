@@ -33,10 +33,6 @@ class MetaCertificate(models.Model):
 
     @classmethod
     def create_certificate(cls, **kwargs):
-        """
-        TODO: use certificate's creation date but not "now".
-        """
-
         cert = cls(**kwargs)
         cert.save()
         # do something with the book
@@ -53,7 +49,14 @@ class CACertificate(MetaCertificate):
 class Certificate(MetaCertificate):
     ca_cert = models.ForeignKey(CACertificate)
     serial = models.IntegerField()
-
+    """
+    TODO:
+    Make serial be different certificates
+    """
+    """
+    TODO:
+    Use serial based on epoch for CA certificate
+    """
     def revoke(self):
         self.revoked = True
         self.save()
@@ -61,17 +64,6 @@ class Certificate(MetaCertificate):
     @staticmethod
     def get_crl(ca_cert, digest=b"sha256"):
         # Search revoked certificates with CA certificate 'ca_cert' in table Certificate
-        """
-        TODO:
-        $ openssl crl -in rootCRL.pem -noout -text
-unable to load CRL
-140351726114464:error:0D07209B:asn1 encoding routines:ASN1_get_object:too long:asn1_lib.c:142:
-140351726114464:error:0D068066:asn1 encoding routines:ASN1_CHECK_TLEN:bad object header:tasn_dec.c:1325:
-140351726114464:error:0D07803A:asn1 encoding routines:ASN1_ITEM_EX_D2I:nested asn1 error:tasn_dec.c:212:Type=ASN1_TIME
-140351726114464:error:0D08303A:asn1 encoding routines:ASN1_TEMPLATE_NOEXP_D2I:nested asn1 error:tasn_dec.c:772:Field=lastUpdate, Type=X509_CRL_INFO
-140351726114464:error:0D08303A:asn1 encoding routines:ASN1_TEMPLATE_NOEXP_D2I:nested asn1 error:tasn_dec.c:772:Field=crl, Type=X509_CRL
-140351726114464:error:0906700D:PEM routines:PEM_ASN1_read_bio:ASN1 lib:pem_oth.c:83:
-        """
         cert_list = Certificate.objects.filter(ca_cert=ca_cert, revoked=True)
         if cert_list:
             crl = crypto.CRL()
@@ -85,6 +77,7 @@ unable to load CRL
                 crl.add_revoked(revoked)
             cakey_x509 = crypto.load_privatekey(crypto.FILETYPE_PEM, ca_cert.key)
             cacert_x509 = crypto.load_certificate(crypto.FILETYPE_PEM, ca_cert.cert)
+            crl.set_lastUpdate(current_time)
             crl.sign(cacert_x509, cakey_x509, digest)
             return crypto.dump_crl(crypto.FILETYPE_PEM, crl).decode('utf-8')
         else:
