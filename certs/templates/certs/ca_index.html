@@ -27,6 +27,7 @@ th {
                 certificate id = {{ certificate.id }}
                 {% endif %}
                 </a></th>
+                <th><a href="{% url 'certs:get_certificates' certificate.id %}">Get certificates</a></th>
                 <th><a href="{% url 'certs:get_crl' certificate.id %}">Generate CRL</a></th>
             </tr>
         {% endfor %}
