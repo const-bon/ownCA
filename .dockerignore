@@ -2,7 +2,8 @@
 .venv
 .git
 bak
-*.pyc
-*.sqlite3
+Dockerfile
+**/*.pyc
+**/*.sqlite3
 certs/migrations/*
 !certs/migrations/__init__.py
