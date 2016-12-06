@@ -1,9 +1,7 @@
 .idea
 .venv
-db.sqlite3*
-
 bak
 *.pyc
-
+*.sqlite3
 certs/migrations/*
 !certs/migrations/__init__.py
