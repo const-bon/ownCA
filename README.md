@@ -1,3 +1,8 @@
+# Docker
+https://hub.docker.com/r/comeanother/ownca/
+
+sudo docker run -d -P comeanother/ownca:latest
+
 # Purpose
 ownCA is a project aimed at providing users with the possibility of creating and managing their own Public Key Infrastructure (PKI) using the built-in web interface. 
 
